@@ -15,8 +15,8 @@ export default async function (req, res) {
     return;
   }
 
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+  const location = req.body.location || '';
+  if (location.trim().length === 0) {
     res.status(400).json({
       error: {
         message: "Please enter a valid animal",
@@ -24,14 +24,19 @@ export default async function (req, res) {
     });
     return;
   }
+  
 
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(animal),
-      temperature: 0.6,
+      prompt: generateInitialPrompt(location),
+      temperature: 1,
+      max_tokens: 1024
     });
-    res.status(200).json({ result: completion.data.choices[0].text });
+    res.status(200).json({ 
+      //result: completion.data.choices[0].text 
+      result: completion.data.choices
+    });
   } catch(error) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {
@@ -48,15 +53,1153 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(animal) {
-  const capitalizedAnimal =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `Suggest three names for an animal that is a superhero.
+// function generatePrompt(animal) {
+//   const capitalizedAnimal =
+//     animal[0].toUpperCase() + animal.slice(1).toLowerCase();
+//   return `Suggest three names for an animal that is a superhero.
 
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
+// Animal: Cat
+// Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
+// Animal: Dog
+// Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
+// Animal: ${capitalizedAnimal}
+// Names:`;
+// }
+
+//Caroline's test
+function generateInitialPrompt(location) {
+  // const capitalizedAnimal =
+  //   animal[0].toUpperCase() + animal.slice(1).toLowerCase();
+  //return `Suggest some team names that rhyme with the word ${capitalizedAnimal}`;
+  return `Pretend you're Bear Grylls in this episode of Man vs Wild. 
+  Give me advice on how to get out of ${location} alive using the below script ${script}`;
 }
+
+
+// const script = 
+//   ">> MY NAME IS BEAR GRYLLS.I'VE SERVED WITH THEBRITISH SPECIAL FORCES, I'VE
+//   CLIMBED TO THE SUMMIT OF
+  
+//   EVEREST, AND CROSSED THE FROZEN
+  
+//   OCEANS OF THE ARCTIC.
+  
+//   NOW I'M GONNA SHOW HOW TO
+  
+//   SURVIVE ONE OF THE MOST
+  
+//   TREACHEROUS LANDSCAPES ON
+  
+//   EARTH -- ALASKA.
+  
+//   OVER A MILLION TOURISTS COME
+  
+  
+  
+  
+//   HERE EVERY YEAR, AND OVER 500 GO
+  
+//   MISSING.
+  
+//   I'M GONNA SHOW THE SKILLS NEEDED
+  
+//   TO STAY ALIVE.
+  
+//   WHOA!
+  
+//   THIS IS THE COAST OF ALASKA,
+  
+//   JUST BELOW THE ARCTIC CIRCLE.
+  
+//   ITS EXTRAORDINARY LANDSCAPE IS
+  
+//   MADE UP OF ENDLESS COASTLINE,
+  
+//   DEEP FORESTS, AND HUGE GLACIERS.
+  
+//   I'M GOING TO MOUNT CHUGACH IN
+  
+//   ALASKA.
+  
+//   IT'S WHERE MOUNTAINEERS, HIKERS,
+  
+//   AND SKIERS COME TO ENJOY THE
+  
+  
+  
+  
+//   WILDERNESS.
+  
+//   BUT WITH THE THRILL COMES
+  
+//   DANGER, AND EVERY YEAR, OVER 20
+  
+//   PEOPLE DIE.
+  
+//   I'M GONNA SHOW HOW TO SURVIVE
+  
+//   IN A WILDERNESS LIKE THIS.
+  
+//   ANY MOMENT NOW, THE PILOT IS
+  
+//   GONNA DROP ME ONTO THE TOP OF
+  
+//   ONE OF THESE MOUNTAINS.
+  
+//   >> WE GOT ABOUT 400 FEET TO
+  
+//   TOUCHDOWN.
+  
+//   100 FEET.
+  
+//   50 FEET.
+  
+//   >> IF NEEDED, I'LL GET SOME HELP
+  
+//   FROM LOCAL EXPERTS, AND THE
+  
+//   CAMERA CREW WILL FOLLOW MY
+  
+//   JOURNEY.
+  
+//   17 OF THE HIGHEST MOUNTAINS IN
+  
+//   THE U.S. ARE HERE IN ALASKA.
+  
+//   IT'S EVERY EXTREME SKIER'S IDEA
+  
+//   OF HEAVEN.
+  
+//   WITH SO FEW PEOPLE AND SO MUCH
+  
+//   SPACE, THIS IS ONE OF AMERICA'S
+  
+//   TRUE WILDERNESSES.
+  
+//   JUST BEAUTIFUL!
+  
+//   BEING OUT IN THESE MOUNTAINS --
+  
+//   AMAZING.
+  
+//   THE BIGGEST THREAT TO SKIERS IS
+  
+//   AVALANCHE.
+  
+//   THEY KILL AROUND 40 PEOPLE EVERY
+  
+//   YEAR IN NORTH AMERICA.
+  
+//   ONE WRONG TURN, AND THE WHOLE
+  
+//   MOUNTAINSIDE COULD COME CRASHING
+  
+//   DOWN ON YOU.
+  
+//   YOU NEED TO KNOW HOW TO AVOID
+  
+//   THEM.
+  
+//   THE KEY WITH AVALANCHES IS TO
+  
+//   READ THE SNOW.
+  
+//   AND YOU CAN USE THE SKI POLE IN
+  
+//   FRONT OF YOU JUST TO TEST IT TO
+  
+//   SEE WHETHER IT'S COMPACTED OR
+  
+//   WHETHER IT'S IN LAYERS.
+  
+//   AND WHAT YOU WANT IS, WHEN YOU
+  
+//   PUSH IT IN, IT'S NICE AND
+  
+//   CONSISTENT.
+  
+//   BUT IF YOU PUSH IT DOWN, AND IT,
+  
+//   LIKE, SUDDENLY DROPS A LITTLE
+  
+//   BIT, IT'S A SIGN IT'S IN LAYERS,
+  
+//   AND THAT'S THE DANGEROUS STUFF.
+  
+//   AVALANCHES ARE OFTEN TRIGGERED
+  
+//   BY INEXPERIENCED SKIERS AND
+  
+//   SNOWBOARDERS WHO COME TO ENJOY
+  
+//   THE 40 FOOT OF VIRGIN SNOW WHICH
+  
+//   CAN OFTEN FALL HERE.
+  
+//   IN EARLY 2006, A SNOWBOARDER
+  
+//   FROM ANCHORAGE TRIGGERED A
+  
+//   200-FOOT-WIDE AVALANCHE ON A
+  
+//   SLOPE JUST LIKE THIS.
+  
+//   HIS BODY WAS EVENTUALLY
+  
+//   RECOVERED THREE MONTHS LATER.
+  
+//   HE'D FALLEN 1,600 FEET.
+  
+//   I'VE SKIED ABOUT 5,000 FEET, AND
+  
+//   AT LAST, I'M LEAVING THE HIGH
+  
+//   SNOW FACES BEHIND.
+  
+//   THERE IS SO MUCH ROCK, AND IT'S
+  
+//   BECOMING IMPOSSIBLE TO SKI ANY
+  
+//   FURTHER.
+  
+//   ALL THESE SKIS WOULD DO IS SLOW
+  
+//   YOU DOWN.
+  
+//   YOU'D BE BETTER OFF WITHOUT
+  
+//   THEM.
+  
+//   BELOW ME IS A GLACIER --
+  
+//   LITERALLY, A RIVER OF ICE, AND,
+  
+//   LIKE A RIVER, THIS GLACIER FLOWS
+  
+//   DOWNHILL.
+  
+//   I'M GONNA FOLLOW THIS RIDGE.
+  
+//   IT'S NOT EASY, AND THE
+  
+//   TEMPERATURE IS DROPPING FAST.
+  
+//   TEMPERATURES HERE IN ALASKA CAN
+  
+//   REACH AS LOW AS MINUS-60
+  
+//   DEGREES, AND FROSTBITE IS ALWAYS
+  
+//   A DANGER IN THE MOUNTAINS.
+  
+//   AND THE BITS TO WATCH OUT FOR
+  
+//   ARE YOUR EXTREMITIES -- YOUR
+  
+//   HANDS, YOUR FEET, YOUR FACE.
+  
+//   AND THE SIGNS THAT YOU ARE
+  
+//   GETTING IT IS THAT YOUR SKIN
+  
+//   GOES THIS WAXY-RED COLOR AND
+  
+//   EVENTUALLY BLACK.
+  
+//   AND I'VE SEEN VERY SEVERE
+  
+//   FROSTBITE ON CLIMBERS ON
+  
+//   EVEREST, AND IT'S A REALLY
+  
+//   HORRIBLE, PAINFUL THING.
+  
+//   THIS RIDGE HAS LED TO A
+  
+//   NORTH-FACING SLOPE.
+  
+//   THIS GETS LESS SUNLIGHT, SO IT'S
+  
+//   STILL COVERED IN SNOW.
+  
+//   [ SIGHS ]
+  
+//   THIS WEATHER IS NOT LOOKING SO
+  
+//   GOOD.
+  
+//   GETTING CAUGHT OUT IN BAD
+  
+//   WEATHER CAN BE FATAL, SO YOU
+  
+//   NEED TO GET DOWN FAST.
+  
+//   BUT THIS SLOPE IS OVER 300 FOOT.
+  
+//   I COULD DOWN-CLIMB, BUT IT WOULD
+  
+//   TAKE HOURS.
+  
+//   INSTEAD, I'M GONNA SHOW YOU A
+  
+//   TECHNIQUE THAT MOUNTAINEERS CALL
+  
+//   A GLISSADE.
+  
+//   AS YOU SLIDE DOWN, YOU SLOW
+  
+//   YOURSELF BY DIGGING IN YOUR ICE
+  
+//   AX.
+  
+//   I DON'T HAVE AN ICE AX, SO I'M
+  
+//   BREAKING A SKI STICK IN HALF
+  
+//   INSTEAD.
+  
+//   YOU REALLY SEE THIS CLOUD NOW
+  
+//   MOVING IN.
+  
+//   I CAN HARDLY EVEN SEE THE BOTTOM
+  
+//   OF THIS GLISSADE, AND I'M PRETTY
+  
+//   NERVOUS ABOUT DOING THIS.
+  
+//   THIS TECHNIQUE IS RISKY, BUT, IN
+  
+//   AN EMERGENCY, IT CAN SAVE YOUR
+  
+//   LIFE.
+  
+//   IF YOU DON'T APPLY ENOUGH
+  
+//   PRESSURE, YOU'LL FALL TOO FAST.
+  
+//   BUT PUSH IN TOO HARD, AND THE
+  
+//   STICK CAN GET RIPPED RIGHT OUT
+  
+//   OF YOUR HAND.
+  
+//   AAH!
+  
+//   [ BREATHING HEAVILY ]
+  
+//   THAT WAS FAST.
+  
+//   I'VE DONE A FEW GLISSADES
+  
+//   BEFORE, BUT NEVER ANYTHING THAT
+  
+//   STEEP AND THAT LONG.
+  
+//   AND I RECKON I HIT 50 MILES AN
+  
+//   HOUR ON THAT, AND THAT'S LIKE
+  
+//   SPEEDING.
+  
+//   WHEW!
+  
+//   WHEW.
+  
+//   I'VE REACHED THE GLACIER, AND
+  
+//   THERE ARE OVER 100,000 OF THESE
+  
+//   IN ALASKA.
+  
+//   THEY FORM THE LARGEST RESERVOIR
+  
+//   OF FRESHWATER ON EARTH.
+  
+//   BUT THE BAD NEWS IS THEY'RE FULL
+  
+//   OF CREVASSES -- DEEP VALLEYS OF
+  
+//   ICE OFTEN COVERED BY LAYERS OF
+  
+//   SNOW.
+  
+//   AND THE ONLY SAFE WAY TO TRAVEL
+  
+//   IS TO BE ROPED AND IN PAIRS.
+  
+//   UGH.
+  
+//   THERE'S SOLID GROUND RUNNING
+  
+//   ALONGSIDE THE GLACIER, BUT
+  
+//   KEEPING MY FOOTING IN THESE SKI
+  
+//   BOOTS IS ALMOST IMPOSSIBLE.
+  
+//   [ WATER RUSHING ]
+  
+//   OH, LOOK.
+  
+//   I SEE THE END OF THE GLACIER.
+  
+//   AND, YEAH, THAT'S DEFINITELY
+  
+//   WHERE IT COMES OUT, AND THAT'S
+  
+//   JUST SUCH A RELIEF.
+  
+//   I'M NEARLY OFF THE SNOW AND ICE,
+  
+//   BUT THE GLACIER STILL HAS ONE
+  
+//   FINAL STING IN ITS TAIL -- A
+  
+//   SHEER CLIFF.
+  
+//   THIS IS LITERALLY NOW THE BOTTOM
+  
+//   OF THE GLACIER, AND THIS MORAINE
+  
+//   IS JUST DROPPING OFF IN THIS
+  
+//   LIKE 40-FOOT WATERFALL.
+  
+//   AND THERE'S NO WAY, IN THESE
+  
+//   BOOTS AND WITHOUT ROPES, I'M
+  
+//   GONNA MAKE IT DOWN THIS, AND
+  
+//   I NEED ANOTHER PLAN.
+  
+//   >> I'VE BEEN DROPPED INTO THE
+  
+//   REMOTE, ICY MOUNTAINS OF ALASKA,
+  
+//   AND NOW I HAVE TO GET OFF THIS
+  
+//   GLACIER.
+  
+//   BUT MY WAY DOWN IS BLOCKED BY A
+  
+//   40-FOOT WATERFALL, BUT THERE'S
+  
+//   ANOTHER WAY.
+  
+//   THERE'S AN ICE TUNNEL INTO THE
+  
+//   GLACIER.
+  
+//   THIS IS FORMED BY MELTWATER
+  
+//   STREAMS WHICH RUN UNDER THE ICE.
+  
+//   BUT THIS ONE COULD LEAD ME OUT.
+  
+//   ICE TUNNELS ARE EXTREMELY
+  
+//   UNSTABLE PLACES, AND GLACIERS
+  
+//   CAN MOVE UP TO 60 FEET A DAY.
+  
+//   BEFORE YOU GO IN, CHECK THE ICE
+  
+//   IS SOLID.
+  
+//   THERE COULD BE OVER 200 FEET OF
+  
+//   ICE ABOVE ME, AND AT ANY MOMENT,
+  
+//   IT COULD COME CRASHING DOWN.
+  
+//   ONLY DO THIS AS A LAST RESORT.
+  
+//   [ WATER RUNNING ]
+  
+//   I'M FINDING IT QUITE
+  
+//   CLAUSTROPHOBIC IN THIS PLACE.
+  
+//   I DON'T KNOW IF YOU CAN COME,
+  
+//   JUST SEE AROUND, BUT THIS IS NOT
+  
+//   A GOOD PLACE TO BE.
+  
+//   AND I WAS ALMOST KILLED ON A
+  
+//   GLACIER LIKE THIS ON EVEREST,
+  
+//   WHERE I HAD A CREVASSE GIVE WAY
+  
+//   UNDER MY FEET.
+  
+//   AND [SIGHS] IT'S NOT BRINGING
+  
+//   BACK GREAT MEMORIES, BEING IN
+  
+//   HERE.
+  
+//   I JUST WANT TO GET OUT NOW.
+  
+//   AND THE FURTHER YOU GO IN, THE
+  
+//   HARDER IT IS TO GO BACK.
+  
+//   THEN, I SEE DAYLIGHT AHEAD.
+  
+//   IT'S MY WAY OUT.
+  
+//   I'VE NEVER BEEN SO RELIEVED.
+  
+//   AND, FINALLY, I'M OFF THE
+  
+//   GLACIER.
+  
+//   IT'S JUST SO GOOD TO BE OUT OF
+  
+//   THAT GLACIER AND JUST HAVE SOME
+  
+//   OPEN SPACE.
+  
+//   BUT THE BEST NEWS OF ALL IS THAT
+  
+//   I'M GONNA GET THESE RUDDY BOOTS
+  
+//   OFF.
+  
+//   AND...
+  
+//   AH.
+  
+//   THAT IS SO NICE.
+  
+//   AND I'M GOING TO KEEP THESE
+  
+//   INNERS.
+  
+//   THEY'RE NOT IDEAL TO WALK IN,
+  
+//   BUT I'M GOING TO NEED SOMETHING
+  
+//   TO PROTECT MY FEET IN THE
+  
+//   TOUGHER TERRAIN THAT'S GONNA BE
+  
+//   AHEAD NOW.
+  
+//   HERE, OFF THE MOUNTAIN, THERE
+  
+//   SHOULD BE FOOD AND SHELTER.
+  
+//   WHOA.
+  
+//   I WAS GETTING DIVE-BOMBED BY
+  
+//   THESE SEA GULLS, AND THAT'S
+  
+//   A SIGN THAT I'VE PROBABLY WALKED
+  
+//   THROUGH AN AREA THAT THEY'RE
+  
+//   NESTING.
+  
+//   AND THEY'RE JUST TRYING TO
+  
+//   PROTECT THEIR EGGS.
+  
+//   WHAT I'M GOING TO TRY AND DO IS
+  
+//   SEE IF I CAN FIND ONE OF THEIR
+  
+//   NESTS AND ACTUALLY FIND MAYBE
+  
+//   SOME EGGS TO EAT.
+  
+//   IT'S JUNE -- PRIME NESTING
+  
+//   SEASON -- AND THESE NESTS COULD
+  
+//   HAVE TWO OR THREE EGGS, EACH ONE
+  
+//   PACKED WITH PROTEIN, VITAMINS,
+  
+//   AND MINERALS.
+  
+//   WHOA.
+  
+//   I'VE SCOURED ALL OVER THESE
+  
+//   BANKS, AND I JUST CAN'T FIND
+  
+//   WHAT THESE GUYS ARE PROTECTING.
+  
+//   THE LANDSCAPE IS BEGINNING TO
+  
+//   OPEN UP, AND I CAN SEE THE TREE
+  
+//   LINE AHEAD.
+  
+//   BUT NOW IT'S STARTING TO RAIN.
+  
+//   BUT AT LEAST, FINALLY, I'M
+  
+//   ALMOST IN THE FOREST.
+  
+//   THIS IS GOOD NEWS.
+  
+//   I'M JUST SEEING NOW THE CLOUDS
+  
+//   CLEARING.
+  
+//   I CAN SEE A THICK FOREST DOWN
+  
+//   THERE, BUT ALSO WHAT LOOKS LIKE
+  
+//   A DEEP GORGE.
+  
+//   AND THERE MIGHT WELL BE A RIVER
+  
+//   AT THE BOTTOM OF THAT, AND
+  
+//   THAT'S WHAT I WANT TO BE HEADING
+  
+//   FOR.
+  
+//   I CAN ONLY SEE A COUPLE OF FEET
+  
+//   AHEAD OF ME NOW, AND IT'S
+  
+//   STRANGELY CLAUSTROPHOBIC.
+  
+//   I KNOW THIS IS BEAR COUNTRY.
+  
+//   BOTH BLACK AND BROWN BEARS LIVE
+  
+//   HERE.
+  
+//   BROWN BEARS CAN WEIGH UP TO
+  
+//   1,100 POUNDS, GROW TO 9 FEET
+  
+//   TALL, AND CAN TEAR A MAN APART.
+  
+//   YOU CAN ACTUALLY SEE WHERE THE
+  
+//   BEAR HERE HAS BEEN SCRATCHING
+  
+//   ALONG THE TREE, AND THIS IS WHAT
+  
+//   THEY DO.
+  
+//   THEY'LL COME ALONG, THEY'LL
+  
+//   SCRATCH, THEN THEY'LL RUB THEIR
+  
+//   BACK AGAINST IT, AND YOU CAN SEE
+  
+//   ACTUALLY WHERE THE BEAR'S FUR IS
+  
+//   THERE.
+  
+//   AND THIS IS ALL PART OF IT JUST
+  
+//   MARKING ITS TERRITORY.
+  
+//   A HIKER WAS RECENTLY KILLED
+  
+//   HERE.
+  
+//   WHEN RANGERS FOUND THE REMAINS
+  
+//   OF HIS BODY, THEY DISCOVERED
+  
+//   BEAR BLOOD AT THE SCENE AND
+  
+//   EMPTY GUN SHELLS.
+  
+//   YO, BEAR!
+  
+//   THE HIKER HAD FIRED TWO SHOTS AT
+  
+//   THE BEAR, BUT THAT WAS NOT
+  
+//   ENOUGH TO STOP THE ATTACK.
+  
+//   BUT BIG GROUPS RARELY GET
+  
+//   ATTACKED, FOR ONE SIMPLE
+  
+//   REASON -- LOTS OF PEOPLE MEANS
+  
+//   LOTS OF NOISE, AND THAT WARNS
+  
+//   OFF THE BEAR.
+  
+//   IT'S WHEN YOU'RE ALONE THAT
+  
+//   YOU'RE VULNERABLE.
+  
+//   BEARS ARE THE MOST DANGEROUS
+  
+//   WHEN THEY'RE SURPRISED.
+  
+//   AND, ACTUALLY, MOST ATTACKS
+  
+//   HAPPEN ON HUNTERS JUST BECAUSE
+  
+//   THEY'RE ALWAYS SNEAKING AROUND,
+  
+//   AND THAT'S WHY IT'S REALLY
+  
+//   IMPORTANT, WHEN YOU'RE ON YOUR
+  
+//   OWN, TO KEEP MAKING LOTS OF
+  
+//   NOISE AND LET THESE BEARS KNOW
+  
+//   THAT YOU'RE HERE.
+  
+//   AND IT MIGHT SOUND A BIT WEIRD,
+  
+//   BUT I'M DOING A LOT OF WANDERING
+  
+//   AROUND AT THE MOMENT GOING, "YO,
+  
+//   BEAR," JUST TRYING TO KEEP THEM
+  
+//   AWAY.
+  
+//   YO, BEAR!
+  
+//   YO, BEAR!
+  
+//   YO, BEAR!
+  
+//   HOWEVER MUCH NOISE I MAKE, I
+  
+//   STILL FEEL UNCOMFORTABLE.
+  
+//   THIS IS BEAR CRAP.
+  
+//   AND THE GOOD NEWS IS THAT YOU
+  
+//   CAN SEE IN THIS POO LITTLE SEEDS
+  
+//   FROM BERRIES.
+  
+//   AND THAT MEANS THERE ARE GONNA
+  
+//   BE BERRIES SOMEWHERE AROUND
+  
+//   NEARBY.
+  
+//   THE BAD NEWS IS IT MEANS THERE'S
+  
+//   A BEAR AROUND SOMEWHERE.
+  
+//   THIS IS ONLY ABOUT A DAY OLD.
+  
+//   THIS UNDERGROWTH IS VICIOUS.
+  
+//   EVERY STEP HURTS.
+  
+//   THIS IS ALL DEVIL'S CLUB, WHICH
+  
+//   MUST BE THE SPIKIEST, THORNIEST
+  
+//   PLANT I'VE EVER COME ACROSS.
+  
+//   JUST LOOK, YOU CAN SEE ALL THE
+  
+//   SPIKES, ALL ALONG THE STEM, ALL
+  
+//   THE WAY DOWN THE STALK.
+  
+//   ALL THE LEAVES, AS WELL, JUST
+  
+//   COVERED IN IT.
+  
+//   AND WHEN THE FLOWERS COME OUT,
+  
+//   EVEN THEY HAVE SPIKES ON IT.
+  
+//   AND THE ROOTS.
+  
+//   AND IT'S JUST HELL TO WALK
+  
+//   THROUGH.
+  
+//   BUT, FOR ALASKAN NATIVES, THIS
+  
+//   IS ONE OF THE MOST REVERED
+  
+//   MEDICINAL PLANTS, JUST FULL OF
+  
+//   LOADS OF GOOD THINGS, LOTS OF
+  
+//   GINSENG.
+  
+//   BUT, TO WALK THROUGH, IT IS NOT
+  
+//   GOOD.
+  
+//   IT'S CLAIMED THAT GINSENG
+  
+//   INCREASES YOUR STRENGTH AND YOUR
+  
+//   STAMINA.
+  
+//   A STREAM HAS MADE A CLEARING
+  
+//   THROUGH THE DEVIL'S CLUB.
+  
+//   THIS SHOULD LEAD TO A RIVER AND
+  
+//   A WAY THROUGH THE FOREST.
+  
+//   IT MEANS I CAN MOVE FAST NOW.
+  
+//   BUT THIS WILDERNESS IS SO
+  
+//   UNPREDICTABLE.
+  
+//   AFTER SEVERAL HUNDRED YARDS,
+  
+//   THERE'S A MAJOR OBSTACLE -- A
+  
+//   HUGE WATERFALL.
+  
+//   THERE'S A CHOICE -- GO DOWN THIS
+  
+//   OR GO BACK INTO THE DEVIL'S
+  
+//   CLUB -- AND NEITHER OPTION FEELS
+  
+//   LIKE A GOOD ONE.
+  
+//   >> I'M IN THE ALASKAN FOREST.
+  
+//   I'VE BEEN FOLLOWING A STREAM,
+  
+//   BUT THERE'S AN OBSTACLE -- THIS
+  
+//   WATERFALL.
+  
+//   IT'S OVER 200 FOOT AND, EVEN
+  
+//   WITH A SAFETY LINE, IT'S RISKY.
+  
+//   BUT I'M AN EXPERIENCED CLIMBER.
+  
+//   I'M GONNA SHOW HOW TO GET DOWN
+  
+//   IT.
+  
+//   THE MOST IMPORTANT THING, WHEN
+  
+//   YOU START DOWN HERE, IS TO TAKE
+  
+//   YOUR TIME.
+  
+//   AND SO MANY ACCIDENTS HAPPEN,
+  
+//   CLIMBING, AS THE ADRENALINE GETS
+  
+//   GOING AND YOU RUSH IT.
+  
+//   AND I'LL TELL YOU, YOU CAN GET
+  
+//   IT RIGHT A THOUSAND TIMES.
+  
+//   YOU ONLY NEED ONE MISTAKE FOR IT
+  
+//   TO ALL GO WRONG.
+  
+//   THESE ROCKS ARE INCREDIBLY
+  
+//   SLIPPERY, AND IT'S EASY TO MAKE
+  
+//   MISTAKES.
+  
+//   TO MAKE IT DOWN, I'LL NEED TO
+  
+//   FOLLOW SOME BASIC CLIMBING
+  
+//   RULES.
+  
+//   LET YOUR LEGS TAKE THE PRESSURE.
+  
+//   SO MANY PEOPLE TRY AND ALWAYS
+  
+//   CLIMB WITH THEIR ARMS, AND YOUR
+  
+//   ARMS GIVE OUT.
+  
+//   YOUR LEGS ARE MUCH, MUCH
+  
+//   STRONGER.
+  
+//   AND JUST USE YOUR ARMS TO STEADY
+  
+//   YOU AND TO BALANCE YOU.
+  
+//   THERE'S LOADS OF LOOSE ROCKS, SO
+  
+//   I HAVE TO TEST EVERY HANDHOLD.
+  
+//   THE FORCE OF THE WATER NOW,
+  
+//   ABOUT HALFWAY DOWN, IS MAKING IT
+  
+//   MUCH HARDER.
+  
+//   IT'S LIKE TRYING TO DOWN-CLIMB
+  
+//   WHILST GIVING SOMEONE A
+  
+//   PIGGYBACK.
+  
+//   OKAY.
+  
+//   THE FINAL BIT IS ALMOST
+  
+//   VERTICAL.
+  
+//   THIS FREEZING GLACIER WATER IS A
+  
+//   TORRENT, AND IT'S PUSHING ME
+  
+//   DOWN HARD, AND THE COLD IS
+  
+//   MAKING IT MUCH WORSE.
+  
+//   [ GASPS ]
+  
+//   [ SIGHS ]
+  
+//   [ GRUNTING ]
+  
+//   THIS WATER IS JUST SO COLD, AND
+  
+//   MY HANDS WERE GETTING SO NUMB UP
+  
+//   THERE, I COULD HARDLY HOLD ON.
+  
+//   BUT I TELL YOU WHAT, LOOKING
+  
+//   BACK UP THERE, THAT IS MUCH
+  
+//   STEEPER THAN I EVER THOUGHT IT
+  
+//   WAS GONNA BE WHEN I STARTED
+  
+//   DOWN IT.
+  
+//   WHEW.
+  
+//   IT'S LIGHT NEARLY 24 HOURS A DAY
+  
+//   HERE IN THE SUMMER, AND IT'S
+  
+//   EASY TO LOSE TRACK OF TIME.
+  
+//   BUT IT'S IMPORTANT TO TAKE A
+  
+//   REST WHEN YOU NEED TO.
+  
+//   WITH SOAKING-WET CLOTHES, YOU'LL
+  
+//   NEED A FIRE TO DRY THEM OUT.
+  
+//   AND IN A SURVIVAL SITUATION,
+  
+//   THERE'S NOTHING BETTER FOR
+  
+//   MORALE THAN A FIRE.
+  
+//   THERE ARE NEARLY 6 MILLION ACRES
+  
+//   OF FOREST IN ALASKA, AND MUCH OF
+  
+//   IT IS COVERED IN SPRUCE AND
+  
+//   ALDER, BOTH OF WHICH ARE GREAT
+  
+//   FOR BUILDING SHELTERS.
+  
+//   TO BUILD A SHELTER, I'M GONNA
+  
+//   NEED LIKE 10 OR SO OF THESE
+  
+//   ALDER SAPLINGS.
+  
+//   AND THE BEST WAY OF CUTTING
+  
+//   THESE IS TO BEND IT OVER UNTIL
+  
+//   YOU SEE THE STRESS OUT OF IT.
+  
+//   AND THEN, WHEN THOSE FIBERS ARE
+  
+//   UNDER STRESS, YOU CAN JUST SHEAR
+  
+//   IT WITH A KNIFE, AND IT WILL CUT
+  
+//   THROUGH.
+  
+//   THAT'S FINE.
+  
+//   YOU CAN RECOGNIZE AN ALDER BY
+  
+//   THE LEAVES.
+  
+//   THEY'RE SERRATED, AND THEY GROW
+  
+//   ALTERNATELY UP THE STEM.
+  
+//   AND I'M USING THIS SPRUCE FOR
+  
+//   THE ROOF.
+  
+//   I'M MAKING WHAT'S CALLED A
+  
+//   HALF-DOME SHELTER.
+  
+//   IT'S SIMPLE AND IT'S FAST.
+  
+//   TO WATERPROOF IT, YOU START AT
+  
+//   THE BOTTOM, THEN MOVE UP,
+  
+//   PUTTING ONE LAYER ON TOP OF THE
+  
+//   ONE BELOW.
+  
+//   AND THEN I NEED FIRE.
+  
+//   I ALWAYS CARRY A FLINT TO LIGHT
+  
+//   A FIRE.
+  
+//   NORMALLY, THIS WILLOW DOWN MAKES
+  
+//   EXCELLENT KINDLING.
+  
+//   BUT IT'S DAMP, SO LIGHTING THIS
+  
+//   FIRE IS GOING TO BE A STRUGGLE.
+  
+//   AH.
+  
+//   AND THAT'S USED UP HALF OF IT --
+  
+//   THE FIRST FAILED ATTEMPT.
+  
+//   BLACK BEARS KILL FEWER PEOPLE
+  
+//   THAN GRIZZLIES, BUT, IN 90% OF
+  
+//   THEIR ATTACKS, THEY LITERALLY
+  
+//   STALK HUMANS AS PREY.
+  
+//   MANY LOCALS CARRY A GUN.
+  
+//   PEOPLE OFTEN THINK THAT GRIZZLY
+  
+//   BEARS ARE THE REALLY DANGEROUS
+  
+//   ONES, BUT, IN THIS PART OF
+  
+//   ALASKA, THE MOST DANGEROUS BEARS
+  
+//   ARE ACTUALLY THE BLACK BEARS.
+  
+//   AND IF ONE APPROACHES YOU,
+  
+//   DEPENDING ON WHICH IT IS, YOU
+  
+//   NEED TO REACT DIFFERENTLY.
+  
+//   IF IT'S A BROWN BEAR, THE
+  
+//   CHANCES ARE IT'S A TERRITORIAL
+  
+//   ISSUE, AND THE BEST THING YOU
+  
+//   CAN DO IS JUST BE SUBMISSIVE AND
+  
+//   BACK OFF.
+  
+//   IF IT'S A BLACK BEAR, THE
+  
+//   CHANCES ARE IT'S AFTER YOU.
+  
+//   AND IN THAT CASE, YOU'RE GONNA
+  
+//   HAVE NO CHOICE APART FROM TO
+  
+//   FIGHT FOR YOUR LIFE.
+  
+//   YOUR BODY HAS AN INTERNAL CLOCK
+  
+//   WHICH MAKES YOU SLEEP WHEN ITS
+  
+//   DARK AND WAKE WHEN IT'S LIGHT.
+  
+//   SO, IN A PLACE LIKE THIS, WHERE
+  
+//   IT'S ONLY DARK FOR FOUR HOURS, A
+  
+//   FULL NIGHT'S SLEEP IS ALWAYS
+  
+//   GONNA BE HARD.
+  
+//   >> IT'S NOW 5:00 A.M., AND IT'S
+  
+//   ALREADY LIGHT.
+  
+//   I'M AWAKE AND A LITTLE CRANKY.
+  
+//   IT'S STILL RAINING.
+  
+//   [ BREATHING HEAVILY ]
+  
+//   AND I'M GETTING A BIT CHEESED
+  
+//   OFF.
+  
+//   BUT I THINK THAT'S ALL RIGHT
+  
+//   WHEN YOU'VE BEEN WET ALL NIGHT.
+  
+//   I THINK YOU'RE ALLOWED TO BE A
+  
+//   BIT CHEESED OFF.
+  
+//   I'M GOING TO CARRY ON, FOLLOWING
+  
+//   THE SAME STREAM THAT I FOLLOWED
+  
+//   YESTERDAY.
+  
+//   I'VE SEEN A RIVER AT THE BOTTOM
+  
+//   OF THE VALLEY, AND THAT'S WHERE
+  
+//   I NEED TO GET TO.
+  
+//   BUT FOLLOWING THE RIVER IS NOT
+  
+//   EASY.
+  
+//   LOTS OF SMALLER STREAMS FLOW
+  
+//   INTO IT, SO I'M CONSTANTLY
+  
+//   FORCED TO CROSS THEM.
+  
+//   AW, I'M SO COLD."

@@ -2,6 +2,57 @@ import Head from "next/head";
 import { useState } from "react";
 import styles from "./index.module.css";
 
+
+
+const express = require('express')
+const api = express()
+const PORT = 8080
+
+//middleware that allows you to handle url encoded data
+api.use(express.urlencoded({extended:false}))
+//json middleware
+api.use(express.json())
+
+api.get('/', (req, res) => {
+  res.send('Welcome to this awesome API')
+})
+
+const data = { test: "test"}
+
+api.get('/test',(req, res)=>{
+  res.status(200).json(data)
+})
+
+
+api.post('/promptResponse',(req, res)=>{
+  console.log(req.body)
+  const input = req.body
+  console.log(retrievePromptResponse(locationInput))
+  res.status(200).send('success')
+})
+
+api.listen(PORT, () => console.log(`API running`))
+
+
+
+async function retrievePromptResponse(locationInput){
+  const response = await fetch("http://localhost:3000/api/generate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ location: locationInput }),
+  });
+
+  const data = await response.json();
+  if (response.status !== 200) {
+    throw data.error || new Error(`Request failed with status ${response.status}`);
+  }
+
+  return data.result;
+}
+
+
 export default function Home() {
   const [animalInput, setAnimalInput] = useState("");
   const [result, setResult] = useState();
@@ -14,7 +65,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ animal: animalInput }),
+        body: JSON.stringify({ location: locationInput }),
       });
 
       const data = await response.json();
